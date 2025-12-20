@@ -1,0 +1,23 @@
+reports/
+# Godot 4+ specific ignores
+.godot/
+.nomedia
+/android/
+
+# Godot-specific ignores
+.editorconfig
+.import/
+export.cfg
+export_credentials.cfg
+*.tmp
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# VSC-specific ignores
+.vscode/
