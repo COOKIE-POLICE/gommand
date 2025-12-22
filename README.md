@@ -17,7 +17,7 @@
   <p align="center">
 	Gommand is a command-based framework for Godot 4.
 	<br />
-	<a href="https://github.com/COOKIE-POLICE/gommand"><strong>Explore the docs »</strong></a>
+	<a href="https://gommand.gitbook.io/gommand/"><strong>Explore the docs »</strong></a>
 	<br />
 	<br />
 	<a href="https://youtu.be/YOUR-VIDEO-ID">View Demo</a>
