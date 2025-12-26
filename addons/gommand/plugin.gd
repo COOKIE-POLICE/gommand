@@ -1,12 +1,25 @@
 @tool
 extends EditorPlugin
 
+var _update_plugin: EditorPlugin
+
 func _initialize_plugin() -> void:
 	add_autoload_singleton("CommandScheduler", "res://addons/gommand/core/command_scheduler.gd")
 	add_custom_type("Subsystem", "Node", preload("res://addons/gommand/core/subsystem.gd"), preload("res://addons/gommand/assets/editor_icons/gear.svg"))
+	var AutoUpdatePlugin = load("res://addons/gommand/core/automatic_update/automatic_update_plugin.gd")
+	if AutoUpdatePlugin:
+		_update_plugin = AutoUpdatePlugin.new()
+		add_child(_update_plugin)
+		_update_plugin._enter_tree()
+
 func _deinitialize_plugin() -> void:
 	remove_autoload_singleton("CommandScheduler")
 	remove_custom_type("Subsystem")
+
+	if _update_plugin:
+		_update_plugin._exit_tree()
+		_update_plugin.queue_free()
+		_update_plugin = null
 
 func _enable_plugin() -> void:
 	_initialize_plugin()
