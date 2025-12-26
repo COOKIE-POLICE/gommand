@@ -3,7 +3,6 @@ extends RefCounted
 
 # A trigger that binds a Godot InputMap action name to command scheduling behavior.
 # This supports scheduling on press/release, running while pressed, and toggling on press.
-
 var action_name: String = ""
 var previously_pressed: bool = false
 

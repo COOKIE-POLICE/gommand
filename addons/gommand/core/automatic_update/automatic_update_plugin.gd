@@ -37,24 +37,20 @@ func _exit_tree() -> void:
 
 
 func _load_config() -> void:
-	var config_path = "res://addons/gommand/core/automatic_update/update_config.tres"
+	# Try to find config file by looking for automatic_update_plugin.gd's directory
+	var script_path = get_script().resource_path
+	var plugin_dir = script_path.get_base_dir()
+	var config_path = plugin_dir.path_join("update_config.tres")
 	
 	if FileAccess.file_exists(config_path):
 		_config = load(config_path) as AutomaticUpdateConfig
-	
-	if not _config:
+		print("AutomaticUpdate: Loaded config from " + config_path)
+	else:
+		push_error("AutomaticUpdate: No config file found at " + config_path)
+		push_error("AutomaticUpdate: Please create an update_config.tres file with your repository settings.")
+		# Create minimal config to prevent crashes
 		_config = AutomaticUpdateConfig.new()
-		_config.repo_owner = "COOKIE-POLICE"
-		_config.repo_name = "gommand"
-		_config.branch = "main"
-		_config.addon_path = "addons/gommand"
-		_config.check_on_startup = true
-		_config.auto_check_enabled = true
-		_config.show_notification = true
-
-		var error = ResourceSaver.save(_config, config_path)
-		if error != OK:
-			push_warning("AutomaticUpdate: Failed to save default config: " + str(error))
+		_config.auto_check_enabled = false
 
 
 func _on_update_available(current_sha: String, latest_sha: String, commit_message: String) -> void:

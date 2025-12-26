@@ -1,15 +1,10 @@
-[gd_resource type="Resource" script_class="AutomaticUpdateConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="AutomaticUpdateConfig" load_steps=2 format=3 uid="uid://bu155f4tb0111"]
 
-[ext_resource type="Script" path="res://addons/gommand/core/automatic_update/automatic_update_config.gd" id="1"]
+[ext_resource type="Script" uid="uid://dtmvui23pqfce" path="res://addons/gommand/core/automatic_update/automatic_update_config.gd" id="1_bjc58"]
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("1_bjc58")
 repo_owner = "COOKIE-POLICE"
 repo_name = "gommand"
-branch = "main"
 addon_path = "addons/gommand"
-check_on_startup = true
-check_interval = 3600.0
-auto_check_enabled = true
 current_commit_sha = ""
-show_notification = true

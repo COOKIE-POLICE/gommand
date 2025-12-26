@@ -85,10 +85,11 @@ func _on_commit_info_retrieved(commit_data: Dictionary) -> void:
 	# Check if we have a current SHA and if it differs
 	var has_update = false
 	if _config.current_commit_sha.is_empty():
-		# First time checking, save current SHA
+		# First time checking, save current SHA without notification
 		print("AutomaticUpdate: Recording initial commit SHA: " + latest_sha)
 		_config.current_commit_sha = latest_sha
 		_save_config()
+		has_update = false
 	elif _config.current_commit_sha != latest_sha:
 		# Update available
 		has_update = true
@@ -164,8 +165,19 @@ func _extract_and_install(zip_path: String) -> void:
 		update_failed.emit("Could not find addon in repository")
 		return
 	
-	# Extract relevant files
+	# Delete the existing addon directory for a clean install
 	var target_addon_path = "res://" + _config.addon_path
+	if DirAccess.dir_exists_absolute(target_addon_path):
+		update_progress.emit("Removing old version...")
+		var delete_result = _delete_directory_recursive(target_addon_path)
+		if not delete_result:
+			zip_reader.close()
+			_is_updating = false
+			update_failed.emit("Failed to remove old addon directory")
+			return
+		print("AutomaticUpdate: Removed old addon directory: " + target_addon_path)
+	
+	# Extract relevant files
 	var extracted_count = 0
 	
 	for file in files:
@@ -217,10 +229,55 @@ func _save_config() -> void:
 	if not _config:
 		return
 	
-	var config_path = "res://" + _config.addon_path.path_join("update_config.tres")
+	# Always save to core/automatic_update directory
+	var config_path = "res://" + _config.addon_path.path_join("core/automatic_update/update_config.tres")
 	var err = ResourceSaver.save(_config, config_path)
 	if err != OK:
-		push_warning("AutomaticUpdate: Failed to save config: " + str(err))
+		push_warning("AutomaticUpdate: Failed to save config to " + config_path + ": " + str(err))
+	else:
+		print("AutomaticUpdate: Config saved to " + config_path)
+
+
+func _delete_directory_recursive(path: String) -> bool:
+	var dir = DirAccess.open(path)
+	if not dir:
+		push_warning("AutomaticUpdate: Failed to open directory: " + path)
+		return false
+	
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	
+	while file_name != "":
+		if file_name == "." or file_name == "..":
+			file_name = dir.get_next()
+			continue
+		
+		var file_path = path.path_join(file_name)
+		
+		if dir.current_is_dir():
+			# Recursively delete subdirectory
+			if not _delete_directory_recursive(file_path):
+				dir.list_dir_end()
+				return false
+		else:
+			# Delete file
+			var delete_err = DirAccess.remove_absolute(file_path)
+			if delete_err != OK:
+				push_warning("AutomaticUpdate: Failed to delete file: " + file_path)
+				dir.list_dir_end()
+				return false
+		
+		file_name = dir.get_next()
+	
+	dir.list_dir_end()
+	
+	# Delete the directory itself
+	var remove_err = DirAccess.remove_absolute(path)
+	if remove_err != OK:
+		push_warning("AutomaticUpdate: Failed to delete directory: " + path)
+		return false
+	
+	return true
 
 
 func set_config(config: AutomaticUpdateConfig) -> void:

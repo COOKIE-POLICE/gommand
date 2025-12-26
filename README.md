@@ -9,7 +9,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/COOKIE-POLICE/gommand">
-    <img src="addons/gommand/assets/editor_icons/icon.png" alt="Logo" width="128" height="128">
+	<img src="addons/gommand/assets/editor_icons/icon.png" alt="Logo" width="128" height="128">
   </a>
 
   <h3 align="center">Gommand</h3>
