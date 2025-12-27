@@ -3,31 +3,13 @@ class_name PureNavigation3DSubsystem
 extends PureNavigationSubsystem
 
 
-@export var path_desired_distance: float = 1.0
-@export var target_desired_distance: float = 1.0
-@export var path_max_distance: float = 3.0
-@export var navigation_layers: int = 1
-@export var pathfinding_algorithm: NavigationPathQueryParameters3D.PathfindingAlgorithm = NavigationPathQueryParameters3D.PATHFINDING_ALGORITHM_ASTAR
-@export var path_postprocessing: NavigationPathQueryParameters3D.PathPostProcessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_CORRIDORFUNNEL
-@export var avoidance_enabled: bool = false
-@export var velocity: Vector3 = Vector3.ZERO
-@export var radius: float = 0.5
-@export var height: float = 2.0
-@export var max_neighbors: int = 10
-@export var time_horizon_agents: float = 1.0
-@export var time_horizon_obstacles: float = 0.0
-@export var max_speed: float = 10.0
-@export var debug_enabled: bool = false
-@export var debug_use_custom: bool = false
-@export var debug_path_custom_color: Color = Color(1, 1, 1)
-@export var debug_path_custom_point_size: float = 4.0
-@export var debug_path_custom_line_width: float = -1.0
+## Optional NavigationAgent3D reference. If not set, a default agent will be created automatically.
+@export var navigation_agent: NavigationAgent3D = null
 
 @export var movement_speed: float = 5.0
 @export var rotation_speed: float = 5.0
 @export var acceleration: float = 10.0
 
-var navigation_agent: NavigationAgent3D = null
 var _target_position: Vector3 = Vector3.ZERO
 var _target_heading: Vector3 = Vector3.FORWARD
 var _is_navigating: bool = false
@@ -38,33 +20,14 @@ func _ready() -> void:
 	_setup_navigation_agent()
 
 func _setup_navigation_agent() -> void:
-	navigation_agent = NavigationAgent3D.new()
-	get_parent().add_child(navigation_agent)
-	_apply_properties_to_agent()
-	navigation_agent.velocity_computed.connect(_on_velocity_computed)
-
-func _apply_properties_to_agent() -> void:
+	# If no navigation agent was provided, create a default one
 	if navigation_agent == null:
-		return
+		navigation_agent = NavigationAgent3D.new()
+		get_parent().add_child(navigation_agent)
 	
-	navigation_agent.path_desired_distance = path_desired_distance
-	navigation_agent.target_desired_distance = target_desired_distance
-	navigation_agent.path_max_distance = path_max_distance
-	navigation_agent.navigation_layers = navigation_layers
-	navigation_agent.pathfinding_algorithm = pathfinding_algorithm
-	navigation_agent.path_postprocessing = path_postprocessing
-	navigation_agent.avoidance_enabled = avoidance_enabled
-	navigation_agent.radius = radius
-	navigation_agent.height = height
-	navigation_agent.max_neighbors = max_neighbors
-	navigation_agent.time_horizon_agents = time_horizon_agents
-	navigation_agent.time_horizon_obstacles = time_horizon_obstacles
-	navigation_agent.max_speed = max_speed
-	navigation_agent.debug_enabled = debug_enabled
-	navigation_agent.debug_use_custom = debug_use_custom
-	navigation_agent.debug_path_custom_color = debug_path_custom_color
-	navigation_agent.debug_path_custom_point_size = debug_path_custom_point_size
-	navigation_agent.debug_path_custom_line_width = debug_path_custom_line_width
+	# Connect velocity signal if using avoidance
+	if not navigation_agent.velocity_computed.is_connected(_on_velocity_computed):
+		navigation_agent.velocity_computed.connect(_on_velocity_computed)
 
 func periodic(delta_time: float) -> void:
 	super.periodic(delta_time)
