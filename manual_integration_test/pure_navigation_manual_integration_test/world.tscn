@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://b2nq1jcjuolc0"]
+
+[ext_resource type="Script" uid="uid://novdmmqgwen1" path="res://manual_integration_test/pure_navigation_manual_integration_test/move_capsule.gd" id="1"]
+[ext_resource type="Script" uid="uid://b77i3k7neidrt" path="res://addons/gommand/core/extensions/pure_navigation/3d/pure_navigation_3d_subsystem.gd" id="2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gpcbf"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_l8y1j"]
+sky_material = SubResource("ProceduralSkyMaterial_gpcbf")
+
+[sub_resource type="Environment" id="Environment_kbefv"]
+background_mode = 2
+sky = SubResource("Sky_l8y1j")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_4m44f"]
+vertices = PackedVector3Array(-9.5, 0.45, -9.5, -9.5, 0.45, 9.5, 9.5, 0.45, 9.5, 9.5, 0.45, -9.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="PlaneMesh" id="1"]
+size = Vector2(20, 20)
+
+[sub_resource type="BoxShape3D" id="2"]
+size = Vector3(20, 0.2, 20)
+
+[sub_resource type="CapsuleMesh" id="3"]
+radius = 0.4
+
+[sub_resource type="CapsuleShape3D" id="4"]
+radius = 0.4
+
+[node name="World" type="Node3D"]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kbefv")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.68524665, 0.72831124, 0, -0.72831124, 0.68524665, 0, 10, 10)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707106, 0.5, -0.5, -0.707106, 0.5, -0.5, 0, 0.707106, 0.707106, 0, 10, 0)
+
+[node name="NavigationRegion" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_4m44f")
+
+[node name="Ground" type="MeshInstance3D" parent="NavigationRegion"]
+mesh = SubResource("1")
+skeleton = NodePath("../..")
+
+[node name="GroundBody" type="StaticBody3D" parent="NavigationRegion/Ground"]
+
+[node name="GroundShape" type="CollisionShape3D" parent="NavigationRegion/Ground/GroundBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+shape = SubResource("2")
+
+[node name="Navigator" type="CharacterBody3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Navigator"]
+mesh = SubResource("3")
+skeleton = NodePath("../..")
+
+[node name="Collider" type="CollisionShape3D" parent="Navigator"]
+shape = SubResource("4")
+
+[node name="PureNavigation3DSubsystem" type="Node" parent="Navigator"]
+unique_name_in_owner = true
+script = ExtResource("2")
