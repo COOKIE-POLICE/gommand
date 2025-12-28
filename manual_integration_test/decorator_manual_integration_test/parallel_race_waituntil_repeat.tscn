@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://n8lm017hq3p6"]
+
+[ext_resource type="Script" uid="uid://dgqe3gbsrbqr3" path="res://manual_integration_test/decorator_manual_integration_test/parallel_race_waituntil_repeat.gd" id="1"]
+
+[node name="ParallelRaceWaitUntilRepeat" type="Node3D"]
+script = ExtResource("1")

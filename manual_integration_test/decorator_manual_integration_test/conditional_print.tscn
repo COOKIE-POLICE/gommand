@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlrv1wmd2pl3w"]
+
+[ext_resource type="Script" uid="uid://df08sklvyqvek" path="res://manual_integration_test/decorator_manual_integration_test/conditional_print.gd" id="1"]
+
+[node name="ConditionalPrint" type="Node3D"]
+script = ExtResource("1")
