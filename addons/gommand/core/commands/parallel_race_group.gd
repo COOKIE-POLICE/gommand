@@ -37,3 +37,9 @@ func end(interrupted: bool) -> void:
 	for command in _commands:
 		if not command.is_finished():
 			command.end(interrupted)
+
+func _on_scheduled() -> void:
+	super._on_scheduled()
+	for command in _commands:
+		if command != null:
+			command._on_scheduled()

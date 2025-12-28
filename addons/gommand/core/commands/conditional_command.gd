@@ -43,3 +43,10 @@ func is_finished() -> bool:
 func end(interrupted: bool) -> void:
 	if _active_command != null:
 		_active_command.end(interrupted)
+
+func _on_scheduled() -> void:
+	super._on_scheduled()
+	if _on_true_command != null:
+		_on_true_command._on_scheduled()
+	if _on_false_command != null:
+		_on_false_command._on_scheduled()

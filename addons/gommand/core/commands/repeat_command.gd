@@ -31,10 +31,10 @@ func execute(delta_time: float) -> void:
 		_count += 1
 		if _times > 0 and _count >= _times:
 			return
-		# restart inner command
-		if not _inner_command._has_initialized():
-			_inner_command.initialize()
-			_inner_command._mark_initialized()
+		# restart inner command - reset state first
+		_inner_command._on_scheduled()
+		_inner_command.initialize()
+		_inner_command._mark_initialized()
 
 func is_finished() -> bool:
 	if _times <= 0:

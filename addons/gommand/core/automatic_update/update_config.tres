@@ -7,3 +7,4 @@ script = ExtResource("1_bjc58")
 repo_owner = "COOKIE-POLICE"
 repo_name = "gommand"
 addon_path = "addons/gommand"
+current_commit_sha = ""

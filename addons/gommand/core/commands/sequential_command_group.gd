@@ -43,3 +43,9 @@ func end(interrupted: bool) -> void:
 	if interrupted and _current_index < _commands.size():
 		var current_command = _commands[_current_index]
 		current_command.end(true)
+
+func _on_scheduled() -> void:
+	super._on_scheduled()
+	for command in _commands:
+		if command != null:
+			command._on_scheduled()

@@ -16,6 +16,11 @@ func initialize() -> void:
 		_inner_command.initialize()
 		_inner_command._mark_initialized()
 
+func _on_scheduled() -> void:
+	super._on_scheduled()
+	if _inner_command != null:
+		_inner_command._on_scheduled()
+
 func execute(delta_time: float) -> void:
 	if _inner_command:
 		_inner_command.execute(delta_time)
