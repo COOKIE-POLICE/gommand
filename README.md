@@ -127,8 +127,6 @@ func _ready() -> void:
     )
 ```
 
-> "Any fool can write code that a computer can understand. Good programmers write code that humans can understand." - Martin Fowler
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
