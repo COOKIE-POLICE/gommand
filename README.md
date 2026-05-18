@@ -46,16 +46,12 @@
 
 ## About The Project
 
-**Gommand** is a command framework for Godot 4 that keeps your code clean.
-
-Instead of managing state machines or tangled control flow, you write small focused commands and compose them into sequences, parallel groups, or conditional flows. The scheduler handles execution order and prevents conflicts automatically.
+**Gommand** is a command framework for Godot 4 that helps you write declarative code. It is inspired by the command framework as part of WPILib.
 
 **What you get:**
-- Readable logic: commands have clear names and a single purpose, so the code says exactly what it does
-- Declarative style: all your logic lives in one place, no hunting across files to understand what happens
+- Declarative style: describe your code in a way that is more "what" than "how"
 - Composable flows: chain sequences, run things in parallel, add conditions and repeats
-- Conflict prevention: subsystem requirements stop commands from clashing
-- Input wiring: bind player actions to commands with `ActionTrigger`, no boilerplate
+- Input wiring: bind player actions to commands with `ActionTrigger`
 
 ## Gommand At a Glance
 
@@ -139,7 +135,6 @@ func _ready() -> void:
 ## Roadmap
 
 - [x] Core framework
-- [ ] Command Visualizer
 - [ ] Documentation
 
 See the [open issues](https://github.com/COOKIE-POLICE/gommand/issues) for a full list of proposed features and known issues.
