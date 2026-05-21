@@ -174,6 +174,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 * [Best README Template](https://github.com/othneildrew/Best-README-Template)
 * [Img Shields](https://shields.io)
 * [GitHub Pages](https://pages.github.com)
+* [Material for MkDocs](https://squidfunk.github.io/mkdocs-material)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
